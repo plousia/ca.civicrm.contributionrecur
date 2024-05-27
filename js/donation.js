@@ -15,40 +15,35 @@ CRM.$(function ($) {
   // Initiate price sections with other amount sections hidden, unless a default "other" option is selected. Give sections an ID. Give other amount inputs a helpful description.
   (function initiateSections() {
       priceSections.forEach(function(section) {
-      const otherAmtSection = section.querySelector(`${recurSettings.other_one_time_amount_section}`) || section.querySelector(`${recurSettings.other_amount_section}`) || section.nextElementSibling;
-      const selectedOptions = section.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked');
-      const desc = otherAmtSection.querySelector('.description');
-      const input = otherAmtSection.querySelector('input');
+        const otherAmtSection = section.querySelector(`${recurSettings.other_one_time_amount_section}`) || section.querySelector(`${recurSettings.other_amount_section}`) || section.nextElementSibling;
+        const selectedOption = section.querySelector('input[type="radio"]:checked');
+        const desc = otherAmtSection.querySelector('.description');
+        const input = otherAmtSection.querySelector('input');
 
-      // get the section's unique class and make it the section ID to associate errors with later (why can't Civi do this...
-      const uniqueClass = [...section.classList].filter((item) => item.includes('-id-'));
-      
-      section.id = uniqueClass;
+        // get the section's unique class and make it the section ID to associate errors with later (why can't Civi do this...
+        const uniqueClass = [...section.classList].filter((item) => item.includes('-id-'));
+        
+        section.id = uniqueClass;
 
-      // give other amount inputs some help text to try to prevent errors
-      if(desc) {
-          desc.id = `${input.id}--desc`;
-      } else {
-          input.insertAdjacentHTML('afterend',
-          `<span class="description" id="${input.id}--desc">
-              ${ts("Please enter numbers only, no periods, spaces, letters or other characters.")}
-          </span>
-          `);
-      }
+        // give other amount inputs some help text to try to prevent errors
+        if(desc) {
+            desc.id = `${input.id}--desc`;
+        } else {
+            input.insertAdjacentHTML('afterend',
+            `<span class="description" id="${input.id}--desc">
+                ${ts("Please enter numbers only, no periods, spaces, letters or other characters.")}
+            </span>
+            `);
+        }
 
-      let zeroOption = [];
-      // check if there is a default selected "other" price option, if not, hide the other amount section
-      selectedOptions.forEach(function(selected) {
-          if(parseFloat(selected.getAttribute("data-amount")) === 0) {
-          zeroOption.push(selected);
+        //check if the active tab has a zero amount selected; if so, show the "other amount" input, else hide it
+        if(selectedOption && parseFloat(selectedOption.getAttribute('data-amount')) === 0) {
+          if(section.classList.contains('price-section--active')) {
+            requireOtherAmt(otherAmtSection);
           }
-      });
-
-      if(selectedOptions.length == 0 || zeroOption.length == 0) {
+        } else {
           hideOtherAmt(otherAmtSection);
-      } else {
-          requireOtherAmt(otherAmtSection);
-      }
+        }
       });
   })();
 
