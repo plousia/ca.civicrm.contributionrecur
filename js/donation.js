@@ -85,7 +85,7 @@ CRM.$(function ($) {
   // Function for showing/hiding relevant sections
   function showHideSections(selectedTab) {
       const target = selectedTab.getAttribute("data-controls");
-      const activeSection = form.querySelector(`#${target}`);
+      const activeSection = form.querySelector(`.${target}`);
       const inactiveTab = tablist.querySelector(`[role="tab"]:not([data-controls="${target}"])`);
       const inactiveSection = form.querySelector(`.${inactiveTab.getAttribute("data-controls")}`);
 
@@ -137,7 +137,7 @@ CRM.$(function ($) {
       const recurSection = form.querySelector('.is_recur-section');
       const checkbox = recurSection.querySelector('input[type="checkbox"]');
 
-      if(activeSection == document.querySelector(`#${recurSettings.monthly_gift_section.value}`)) {
+      if(activeSection == document.querySelector(`.${recurSettings.monthly_gift_section.value}`)) {
       checkbox.checked = true;
       checkbox.setAttribute('aria-disabled', true);
       recurSection.removeAttribute('hidden');
@@ -183,7 +183,7 @@ CRM.$(function ($) {
 
       const inactiveSection = form.querySelector('.price-section--inactive');
       const options = inactiveSection.querySelectorAll('input[type="radio"], input[type="checkbox"]');
-      const inactiveOther = inactiveSection.querySelector(`#${recurSettings.other_one_time_amount_section.value}`) || inactiveSection.querySelector(`#${recurSettings.other_amount_section.value}`) || inactiveSection.nextElementSibling;
+      const inactiveOther = inactiveSection.querySelector(`.${recurSettings.other_one_time_amount_section.value}`) || inactiveSection.querySelector(`.${recurSettings.other_amount_section.value}`) || inactiveSection.nextElementSibling;
 
       options.forEach(function(option) {
           option.checked ? option.checked = false : null;
