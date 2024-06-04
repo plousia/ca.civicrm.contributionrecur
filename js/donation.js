@@ -10,17 +10,17 @@ CRM.$(function ($) {
   'use strict';
   const recurSettings = (typeof CRM.contributionrecur == 'undefined') ? CRM.vars.contributionrecur : CRM.contributionrecur;
   const form = document.querySelector('.crm-container form');
-  const priceSections = form.querySelectorAll(recurSettings.one_time_gift_section, recurSettings.monthly_gift_section);
+  const priceSections = form.querySelectorAll(`.${recurSettings.one_time_gift_section.value}, .${recurSettings.monthly_gift_section.value}`);
 
   // Initiate price sections with other amount sections hidden, unless a default "other" option is selected. Give sections an ID. Give other amount inputs a helpful description.
   (function initiateSections() {
       priceSections.forEach(function(section) {
-        const otherAmtSection = section.querySelector(`${recurSettings.other_one_time_amount_section}`) || section.querySelector(`${recurSettings.other_amount_section}`) || section.nextElementSibling;
+        const otherAmtSection = section.querySelector(`.${recurSettings.other_one_time_amount_section.value}`) || section.querySelector(`.${recurSettings.other_amount_section.value}`) || section.nextElementSibling;
         const selectedOption = section.querySelector('input[type="radio"]:checked');
         const desc = otherAmtSection.querySelector('.description');
         const input = otherAmtSection.querySelector('input');
 
-        // get the section's unique class and make it the section ID to associate errors with later (why can't Civi do this...
+        // get the section's unique class and make it the section ID to associate errors with later (why can't Civi do this...)
         const uniqueClass = [...section.classList].filter((item) => item.includes('-id-'));
         
         section.id = uniqueClass;
@@ -74,8 +74,8 @@ CRM.$(function ($) {
   
       tabpanel.insertAdjacentHTML('beforebegin', 
         `<div role="tablist" class="gift-type-select" aria-label="${ts("Donation form")}">
-          <button id="one-time-gift" type="button" role="tab" data-controls="${recurSettings.one_time_gift_section.id}" tabindex="-1" aria-selected="true">${ts("One-time Gift")}</button>
-          <button id="monthly-gift" type="button" role="tab" data-controls="${recurSettings.monthly_gift_section.id}" tabindex="-1">${ts("Monthly Gift")}</button>
+          <button id="one-time-gift" type="button" role="tab" data-controls="${recurSettings.one_time_gift_section.value}" tabindex="-1" aria-selected="true">${ts("One-time Gift")}</button>
+          <button id="monthly-gift" type="button" role="tab" data-controls="${recurSettings.monthly_gift_section.value}" tabindex="-1">${ts("Monthly Gift")}</button>
         </div>`);
     })();
 
@@ -137,7 +137,7 @@ CRM.$(function ($) {
       const recurSection = form.querySelector('.is_recur-section');
       const checkbox = recurSection.querySelector('input[type="checkbox"]');
 
-      if(activeSection === recurSettings.monthly_gift_section) {
+      if(activeSection == document.querySelector(`#${recurSettings.monthly_gift_section.value}`)) {
       checkbox.checked = true;
       checkbox.setAttribute('aria-disabled', true);
       recurSection.removeAttribute('hidden');
@@ -155,7 +155,7 @@ CRM.$(function ($) {
   // Show/hide other amount section and/or section error based on selected option
   priceSections.forEach(function(section) {
       const options = section.querySelectorAll('input[type="radio"]');
-      const otherAmtSection = section.querySelector(`${recurSettings.other_one_time_amount_section}`) || section.querySelector(`${recurSettings.other_amount_section}`) || section.nextElementSibling;
+      const otherAmtSection = section.querySelector(`.${recurSettings.other_one_time_amount_section.value}`) || section.querySelector(`.${recurSettings.other_amount_section.value}`) || section.nextElementSibling;
 
       options.forEach(function(option) {
           option.addEventListener('change', function(e) {
@@ -183,7 +183,7 @@ CRM.$(function ($) {
 
       const inactiveSection = form.querySelector('.price-section--inactive');
       const options = inactiveSection.querySelectorAll('input[type="radio"], input[type="checkbox"]');
-      const inactiveOther = inactiveSection.querySelector(`${recurSettings.other_one_time_amount_section}`) || inactiveSection.querySelector(`${recurSettings.other_amount_section}`) || inactiveSection.nextElementSibling;
+      const inactiveOther = inactiveSection.querySelector(`#${recurSettings.other_one_time_amount_section.value}`) || inactiveSection.querySelector(`#${recurSettings.other_amount_section.value}`) || inactiveSection.nextElementSibling;
 
       options.forEach(function(option) {
           option.checked ? option.checked = false : null;
@@ -220,7 +220,7 @@ CRM.$(function ($) {
   // Other amount option selected but no other amount entered, or input is not a number? Create an error.
   function createOtherError() {
       const activeSection = form.querySelector('.price-section--active');
-      const otherAmt = activeSection.querySelector(`${recurSettings.other_one_time_amount_section}`) || activeSection.querySelector(`${recurSettings.other_amount_section}`) || activeSection.nextElementSibling;
+      const otherAmt = activeSection.querySelector(`.${recurSettings.other_one_time_amount_section.value}`) || activeSection.querySelector(`.${recurSettings.other_amount_section.value}`) || activeSection.nextElementSibling;
       const label = otherAmt.querySelector('label');
       const input = otherAmt.querySelector('input');
       const id = input.id;
