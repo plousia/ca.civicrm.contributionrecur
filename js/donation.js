@@ -74,13 +74,30 @@ CRM.$(function ($) {
   
       tabpanel.insertAdjacentHTML('beforebegin', 
         `<div role="tablist" class="gift-type-select" aria-label="${ts("Donation form")}">
-          <button id="one-time-gift" type="button" role="tab" data-controls="${recurSettings.one_time_gift_section}" tabindex="-1" aria-selected="true">${ts("One-time Gift")}</button>
+          <button id="one-time-gift" type="button" role="tab" data-controls="${recurSettings.one_time_gift_section}" tabindex="-1">${ts("One-time Gift")}</button>
           <button id="monthly-gift" type="button" role="tab" data-controls="${recurSettings.monthly_gift_section}" tabindex="-1">${ts("Monthly Gift")}</button>
         </div>`);
     })();
 
   const tablist = form.querySelector('[role="tablist"]');
   const tabs = tablist.querySelectorAll('[role="tab"]');
+
+  // If "recurring" checkbox is selected, initiate monthly tab selected; else, set one-time tab selected
+  (function initiateSelectedTab() {
+    const recur = form.querySelector('#is_recur');
+    const monthlyTab = tablist.querySelector(`${recurSettings.monthly_gift_section}`);
+    const oneTimeTab = tablist.querySelector(`${recurSettings.one_time_gift_section}`);
+
+    if(recur.checked === true) {
+      monthlyTab.setAttribute('aria-selected', 'true');
+      monthlyTab.removeAttribute('tabindex');
+      oneTimeTab.setAttribute('tabindex', '-1');
+    } else {
+      oneTimeTab.setAttribute('aria-selected', 'true');
+      oneTimeTab.removeAttribute('tabindex');
+      monthlyTab.setAttribute('tabindex', '-1');
+    }
+  })();
 
   // Function for showing/hiding relevant sections
   function showHideSections(selectedTab) {

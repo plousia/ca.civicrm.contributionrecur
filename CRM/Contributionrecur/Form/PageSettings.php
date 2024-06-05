@@ -58,7 +58,7 @@ class CRM_Contributionrecur_Form_PageSettings extends CRM_Contribute_Form_Contri
     $this->add(
       'select', // field type
       'default_recur', // field name
-      ts('Default the recurring checkbox to checked, but allow users to uncheck it.'),
+      ts('Default the recurring checkbox to checked and monthly gift tab to selected.'),
       $options
     );
     $this->add(
